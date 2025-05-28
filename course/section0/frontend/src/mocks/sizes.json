@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "code": "small",
+    "name": "23 см",
+    "image": "diameter.svg",
+    "multiplier": 1
+  },
+  {
+    "id": 2,
+    "code": "normal",
+    "name": "32 см",
+    "image": "diameter.svg",
+    "multiplier": 2
+  },
+  {
+    "id": 3,
+    "code": "big",
+    "name": "45 см",
+    "image": "diameter.svg",
+    "multiplier": 3
+  }
+]
