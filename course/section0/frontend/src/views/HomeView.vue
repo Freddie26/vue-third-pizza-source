@@ -10,11 +10,11 @@
             <h2 class="title title--small sheet__title">Выберите тесто</h2>
 
             <div class="sheet__content dough">
-              <label v-for="item of dough" :key="item.id" class="dough__input">
-                <input type="radio" name="dough" :value="item.code" class="visually-hidden">
-                <img :src="getImage(item.image)" :alt="item.name">
-                <b>{{ item.name }}</b>
-                <span>{{ item.description }}</span>
+              <label v-for="doughItem of doughItems" :key="doughItem.id" class="dough__input">
+                <input type="radio" name="dough" :value="doughItem.code" class="visually-hidden">
+                <img :src="getImage(doughItem.image)" :alt="doughItem.name">
+                <b>{{ doughItem.name }}</b>
+                <span>{{ doughItem.description }}</span>
               </label>
             </div>
           </div>
@@ -25,10 +25,10 @@
             <h2 class="title title--small sheet__title">Выберите размер</h2>
 
             <div class="sheet__content diameter">
-              <label v-for="size of sizes" :key="size.id" class="diameter__input diameter__input--small">
-                <input type="radio" name="diameter" :value="size.code" class="visually-hidden">
-                <img :src="getImage(size.image)" :alt="size.name">
-                <span>{{ size.name }}</span>
+              <label v-for="sizeItem of sizeItems" :key="sizeItem.id" class="diameter__input diameter__input--small">
+                <input type="radio" name="diameter" :value="sizeItem.code" class="visually-hidden">
+                <img :src="getImage(sizeItem.image)" :alt="sizeItem.name">
+                <span>{{ sizeItem.name }}</span>
               </label>
             </div>
           </div>
@@ -42,9 +42,9 @@
               <div class="ingredients__sauce">
                 <p>Основной соус:</p>
 
-                <label v-for="sauce of sauces" :key="sauce.id" class="radio ingredients__input">
-                  <input type="radio" name="sauce" :value="sauce.code">
-                  <span>{{ sauce.name }}</span>
+                <label v-for="sauceItem of sauceItems" :key="sauceItem.id" class="radio ingredients__input">
+                  <input type="radio" name="sauce" :value="sauceItem.code">
+                  <span>{{ sauceItem.name }}</span>
                 </label>
               </div>
 
@@ -52,10 +52,10 @@
                 <p>Начинка:</p>
 
                 <ul class="ingredients__list">
-                  <li v-for="ingredient of ingredients" :key="ingredient.id" class="ingredients__item">
-                    <span class="filling">{{ ingredient.name }}</span>
+                  <li v-for="ingredientItem of ingredientItems" :key="ingredientItem.id" class="ingredients__item">
+                    <span class="filling">{{ ingredientItem.name }}</span>
 
-                    <img :src="getImage(ingredient.image)" :alt="ingredient.name">
+                    <img :src="getImage(ingredientItem.image)" :alt="ingredientItem.name">
 
                     <div class="counter counter--orange ingredients__counter">
                       <button type="button" class="counter__button counter__button--minus" disabled>
@@ -100,10 +100,22 @@
 </template>
 
 <script setup>
-import dough from '@/mocks/dough.json';
-import ingredients from '@/mocks/ingredients.json';
-import sizes from '@/mocks/sizes.json';
-import sauces from '@/mocks/sauces.json';
+import {
+  normalizeDough,
+  normalizeIngredients,
+  normalizeSauces,
+  normalizeSize,
+} from "@/common/helpers/normalize";
+
+import doughJSON from '@/mocks/dough.json';
+import ingredientsJSON from '@/mocks/ingredients.json';
+import sizesJSON from '@/mocks/sizes.json';
+import saucesJSON from '@/mocks/sauces.json';
+
+const doughItems = doughJSON.map(normalizeDough);
+const ingredientItems = ingredientsJSON.map(normalizeIngredients);
+const sauceItems = saucesJSON.map(normalizeSauces);
+const sizeItems = sizesJSON.map(normalizeSize);
 
 function getImage(image) {
   let path = `../assets/img/${image}`;
