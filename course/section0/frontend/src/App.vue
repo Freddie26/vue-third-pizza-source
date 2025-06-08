@@ -11,4 +11,5 @@ import HomeView from "./views/HomeView.vue";
 </template>
 
 <style lang="scss">
+@import "@/assets/scss/app.scss";
 </style>
