@@ -4,9 +4,9 @@
       <div class="content__wrapper">
         <h1 class="title title--big">Конструктор пиццы</h1>
 
-        <dough-selector />
+        <dough-selector :v-model="pizza.dough" :items="doughItems" />
 
-        <diameter-selector :items="sizeItems" />
+        <diameter-selector :v-model="pizza.size" :items="sizeItems" />
 
         <div class="content__ingredients">
           <div class="sheet">
@@ -15,60 +15,13 @@
             </h2>
 
             <div class="sheet__content ingredients">
-              <div class="ingredients__sauce">
-                <p>Основной соус:</p>
+              <sauce-selector :v-model="pizza.sauce" :items="sauceItems" />
 
-                <label
-                  v-for="sauceType in sauceItems"
-                  :key="sauceType.id"
-                  class="radio ingredients__input"
-                >
-                  <input type="radio" name="sauce" :value="sauceType.value" />
-                  <span>{{ sauceType.name }}</span>
-                </label>
-              </div>
-
-              <div class="ingredients__filling">
-                <p>Начинка:</p>
-
-                <ul class="ingredients__list">
-                  <li
-                    v-for="ingredientType in ingredientItems"
-                    :key="ingredientType.id"
-                    class="ingredients__item"
-                  >
-                    <div class="filling">
-                      <img
-                        :src="getImage(ingredientType.image)"
-                        :alt="ingredientType.name"
-                      />
-                      {{ ingredientType.name }}
-                    </div>
-
-                    <div class="counter counter--orange ingredients__counter">
-                      <button
-                        type="button"
-                        class="counter__button counter__button--minus"
-                        disabled
-                      >
-                        <span class="visually-hidden">Меньше</span>
-                      </button>
-                      <input
-                        type="text"
-                        name="counter"
-                        class="counter__input"
-                        value="0"
-                      />
-                      <button
-                        type="button"
-                        class="counter__button counter__button--plus"
-                      >
-                        <span class="visually-hidden">Больше</span>
-                      </button>
-                    </div>
-                  </li>
-                </ul>
-              </div>
+              <ingredients-selector
+                  :values="pizza.ingredients"
+                  :items="ingredientItems"
+                  @update="updateIngredientAmount"
+              />
             </div>
           </div>
         </div>
@@ -104,6 +57,7 @@
 </template>
 
 <script setup>
+import {reactive} from "vue";
 import {normalizeDough, normalizeIngredients, normalizeSauces, normalizeSize,} from "@/common/helpers/normalize";
 import doughJSON from "@/mocks/dough.json";
 import ingredientsJSON from "@/mocks/ingredients.json";
@@ -111,16 +65,31 @@ import saucesJSON from "@/mocks/sauces.json";
 import sizesJSON from "@/mocks/sizes.json";
 import DiameterSelector from "@/modules/constroctor/DiameterSelector.vue";
 import DoughSelector from "@/modules/constroctor/DoughSelector.vue";
+import SauceSelector from "@/modules/constroctor/SauceSelector.vue";
+import IngredientsSelector from "@/modules/constroctor/IngridientsSelector.vue";
 
 const doughItems = doughJSON.map(normalizeDough);
 const ingredientItems = ingredientsJSON.map(normalizeIngredients);
 const sauceItems = saucesJSON.map(normalizeSauces);
 const sizeItems = sizesJSON.map(normalizeSize);
 
-const getImage = (image) => {
-  // https://vitejs.dev/guide/assets.html#new-url-url-import-meta-url
-  return new URL(`../assets/img/${image}`, import.meta.url).href;
-};
+const pizza = reactive({
+  name: '',
+  dough: doughItems[0].value,
+  size: sizeItems[0].value,
+  sauce: sauceItems[0].value,
+  ingredients: ingredientItems.reduce(
+    (acc, item) => {
+      acc[item.value] = 0;
+      return acc;
+    },
+    {}
+  )
+})
+
+function updateIngredientAmount(ingredient, count) {
+  pizza.ingredients[ingredient] = count;
+}
 </script>
 
 <style lang="scss">
@@ -221,39 +190,6 @@ const getImage = (image) => {
   border-top: 1px solid rgba($green-500, 0.1);
 }
 
-.ingredients__sauce {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-
-  width: 100%;
-  margin-bottom: 14px;
-
-  p {
-    @include r-s16-h19;
-
-    margin-top: 0;
-    margin-right: 16px;
-    margin-bottom: 10px;
-  }
-}
-
-.ingredients__input {
-  margin-right: 24px;
-  margin-bottom: 10px;
-}
-
-.ingredients__filling {
-  width: 100%;
-
-  p {
-    @include r-s16-h19;
-
-    margin-top: 0;
-    margin-bottom: 16px;
-  }
-}
-
 .title {
   box-sizing: border-box;
   width: 100%;
@@ -267,302 +203,6 @@ const getImage = (image) => {
 
   &--small {
     @include b-s18-h21;
-  }
-}
-
-.ingredients__list {
-  @include clear-list;
-
-  display: flex;
-  align-items: flex-start;
-  flex-wrap: wrap;
-}
-
-.ingredients__item {
-  width: 100px;
-  min-height: 40px;
-  margin-right: 17px;
-  margin-bottom: 35px;
-}
-
-.ingredients__counter {
-  width: 54px;
-  margin-top: 10px;
-  margin-left: 36px;
-}
-
-.radio {
-  cursor: pointer;
-
-  span {
-    @include r-s16-h19;
-
-    position: relative;
-
-    padding-left: 28px;
-
-    &:before {
-      @include p_center-v;
-
-      display: block;
-
-      box-sizing: border-box;
-      width: 20px;
-      height: 20px;
-
-      content: "";
-      transition: 0.3s;
-
-      border: 1px solid $purple-400;
-      border-radius: 50%;
-      background-color: $white;
-    }
-  }
-
-  &:hover {
-    input:not(:checked):not(:disabled) + span {
-      &:before {
-        border-color: $purple-800;
-      }
-    }
-  }
-
-  input {
-    display: none;
-
-    &:checked + span {
-      &:before {
-        border: 6px solid $green-500;
-      }
-    }
-
-    &:disabled {
-      & + span {
-        &:before {
-          border-color: $purple-400;
-          background-color: $silver-200;
-        }
-      }
-
-      &:checked + span {
-        &:before {
-          border: 6px solid $purple-400;
-        }
-      }
-    }
-  }
-}
-
-.counter {
-  display: flex;
-
-  justify-content: space-between;
-  align-items: center;
-}
-
-.counter__button {
-  $el: &;
-  $size_icon: 50%;
-
-  position: relative;
-
-  display: block;
-
-  width: 16px;
-  height: 16px;
-  margin: 0;
-  padding: 0;
-
-  cursor: pointer;
-  transition: 0.3s;
-
-  border: none;
-  border-radius: 50%;
-  outline: none;
-
-  &--minus {
-    background-color: $purple-100;
-
-    &::before {
-      @include p_center-all;
-
-      width: $size_icon;
-      height: 2px;
-
-      content: "";
-
-      border-radius: 2px;
-      background-color: $black;
-    }
-
-    &:hover:not(:active):not(:disabled) {
-      background-color: $purple-200;
-    }
-
-    &:active:not(:disabled) {
-      background-color: $purple-300;
-    }
-
-    &:focus:not(:disabled) {
-      box-shadow: $shadow-regular;
-    }
-
-    &:disabled {
-      cursor: default;
-
-      &::before {
-        opacity: 0.1;
-      }
-    }
-  }
-
-  &--plus {
-    background-color: $green-500;
-
-    &::before {
-      @include p_center-all;
-
-      width: $size_icon;
-      height: 2px;
-
-      content: "";
-
-      border-radius: 2px;
-      background-color: $white;
-    }
-
-    &::after {
-      @include p_center-all;
-
-      width: $size_icon;
-      height: 2px;
-
-      content: "";
-      transform: translate(-50%, -50%) rotate(90deg);
-
-      border-radius: 2px;
-      background-color: $white;
-    }
-
-    &:hover:not(:active):not(:disabled) {
-      background-color: $green-400;
-    }
-
-    &:active:not(:disabled) {
-      background-color: $green-600;
-    }
-
-    &:focus:not(:disabled) {
-      box-shadow: $shadow-regular;
-    }
-
-    &:disabled {
-      cursor: default;
-
-      opacity: 0.3;
-    }
-  }
-
-  &--orange {
-    background-color: $orange-200;
-
-    &:hover:not(:active):not(:disabled) {
-      background-color: $orange-100;
-    }
-
-    &:active:not(:disabled) {
-      background-color: $orange-300;
-    }
-  }
-}
-
-.counter__input {
-  @include r-s14-h16;
-
-  box-sizing: border-box;
-  width: 22px;
-  margin: 0;
-  padding: 0 3px;
-
-  text-align: center;
-
-  color: $black;
-  border: none;
-  border-radius: 10px;
-  outline: none;
-  background-color: transparent;
-
-  &:focus {
-    box-shadow: inset $shadow-regular;
-  }
-}
-
-.dough__input {
-  position: relative;
-
-  margin-right: 8%;
-  margin-bottom: 20px;
-  padding-left: 50px;
-
-  cursor: pointer;
-
-  img {
-    @include p_center-v;
-
-    width: 36px;
-    height: 36px;
-
-    transition: 0.3s;
-
-    border-radius: 50%;
-  }
-
-  b {
-    @include r-s16-h19;
-  }
-
-  span {
-    @include l-s11-h13;
-
-    display: block;
-  }
-
-  &:hover {
-    img {
-      box-shadow: $shadow-regular;
-    }
-  }
-
-  input {
-    &:checked + img {
-      box-shadow: $shadow-large;
-    }
-  }
-}
-
-
-
-.filling {
-  @include r-s14-h16;
-
-  position: relative;
-
-  display: block;
-
-  padding-left: 36px;
-
-  img {
-    @include p_center-v;
-
-    display: block;
-
-    width: 32px;
-    height: 32px;
-
-    box-sizing: border-box;
-    padding: 4px;
-
-    border-radius: 50%;
   }
 }
 

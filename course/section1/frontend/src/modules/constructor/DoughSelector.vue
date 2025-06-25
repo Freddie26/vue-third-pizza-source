@@ -1,13 +1,5 @@
 <script setup>
-import {getImage} from "@/common/helpers";
 
-const model = defineModel();
-const props = defineProps({
-  items: {
-    type: Array,
-    default: () => []
-  }
-});
 </script>
 
 <template>
@@ -17,7 +9,7 @@ const props = defineProps({
 
       <div class="sheet__content dough">
         <label
-            v-for="doughType in items"
+            v-for="doughType in doughItems"
             :key="doughType.id"
             class="dough__input"
         >
@@ -26,8 +18,7 @@ const props = defineProps({
               name="dough"
               :value="doughType.value"
               class="visually-hidden"
-              :checked="doughType.value === model"
-              @input="model = doughType.value"
+              checked
           />
           <img :src="getImage(doughType.image)" :alt="doughType.name" />
 
@@ -40,6 +31,42 @@ const props = defineProps({
 </template>
 
 <style scoped lang="scss">
+@import "@/assets/scss/ds-system/ds.scss";
+@import "@/assets/scss/mixins/mixins.scss";
+
+.content__dough {
+  width: 527px;
+  margin-top: 15px;
+  margin-right: auto;
+  margin-bottom: 15px;
+}
+
+.sheet {
+  padding-top: 15px;
+
+  border-radius: 8px;
+  background-color: $white;
+  box-shadow: $shadow-light;
+}
+
+.sheet__title {
+  padding-right: 18px;
+  padding-left: 18px;
+}
+
+.sheet__content {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  margin-top: 8px;
+  padding-top: 18px;
+  padding-right: 18px;
+  padding-left: 18px;
+
+  border-top: 1px solid rgba($green-500, 0.1);
+}
+
 .dough__input {
   position: relative;
 
