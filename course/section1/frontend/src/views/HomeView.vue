@@ -4,54 +4,9 @@
       <div class="content__wrapper">
         <h1 class="title title--big">Конструктор пиццы</h1>
 
-        <div class="content__dough">
-          <div class="sheet">
-            <h2 class="title title--small sheet__title">Выберите тесто</h2>
+        <dough-selector />
 
-            <div class="sheet__content dough">
-              <label
-                v-for="doughType in doughItems"
-                :key="doughType.id"
-                class="dough__input"
-              >
-                <input
-                  type="radio"
-                  name="dough"
-                  :value="doughType.value"
-                  class="visually-hidden"
-                  checked
-                />
-                <img :src="getImage(doughType.image)" :alt="doughType.name" />
-
-                <b>{{ doughType.name }}</b>
-                <span>{{ doughType.description }}</span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="content__diameter">
-          <div class="sheet">
-            <h2 class="title title--small sheet__title">Выберите размер</h2>
-
-            <div class="sheet__content diameter">
-              <label
-                v-for="sizeType in sizeItems"
-                :key="sizeType.id"
-                class="diameter__input"
-                :class="`diameter__input--${sizeType.value}`"
-              >
-                <input
-                  type="radio"
-                  name="diameter"
-                  :value="sizeType.value"
-                  class="visually-hidden"
-                />
-                <span>{{ sizeType.name }}</span>
-              </label>
-            </div>
-          </div>
-        </div>
+        <diameter-selector :items="sizeItems" />
 
         <div class="content__ingredients">
           <div class="sheet">
@@ -149,16 +104,13 @@
 </template>
 
 <script setup>
-import {
-  normalizeDough,
-  normalizeIngredients,
-  normalizeSauces,
-  normalizeSize,
-} from "@/common/helpers/normalize";
+import {normalizeDough, normalizeIngredients, normalizeSauces, normalizeSize,} from "@/common/helpers/normalize";
 import doughJSON from "@/mocks/dough.json";
 import ingredientsJSON from "@/mocks/ingredients.json";
 import saucesJSON from "@/mocks/sauces.json";
 import sizesJSON from "@/mocks/sizes.json";
+import DiameterSelector from "@/modules/constroctor/DiameterSelector.vue";
+import DoughSelector from "@/modules/constroctor/DoughSelector.vue";
 
 const doughItems = doughJSON.map(normalizeDough);
 const ingredientItems = ingredientsJSON.map(normalizeIngredients);
@@ -588,72 +540,7 @@ const getImage = (image) => {
   }
 }
 
-.diameter__input {
-  margin-right: 8.7%;
-  margin-bottom: 20px;
-  padding-top: 7px;
-  padding-bottom: 6px;
 
-  cursor: pointer;
-
-  span {
-    @include r-s16-h19;
-
-    position: relative;
-
-    padding-left: 46px;
-
-    &::before {
-      @include p_center_v;
-
-      width: 36px;
-      height: 36px;
-
-      content: "";
-      transition: 0.3s;
-
-      border-radius: 50%;
-      background-color: $green-100;
-      background-image: url("@/assets/img/diameter.svg");
-      background-repeat: no-repeat;
-      background-position: center;
-    }
-  }
-
-  &:nth-child(3n) {
-    margin-right: 0;
-  }
-
-  &--small {
-    span::before {
-      background-size: 18px;
-    }
-  }
-
-  &--normal {
-    span::before {
-      background-size: 29px;
-    }
-  }
-
-  &--big {
-    span::before {
-      background-size: 100%;
-    }
-  }
-
-  &:hover {
-    span::before {
-      box-shadow: $shadow-regular;
-    }
-  }
-
-  input {
-    &:checked + span::before {
-      box-shadow: $shadow-large;
-    }
-  }
-}
 
 .filling {
   @include r-s14-h16;
