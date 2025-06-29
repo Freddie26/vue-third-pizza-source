@@ -1,16 +1,66 @@
 <script setup>
+import { computed } from "vue";
+import AppDrop from "@/common/components/AppDrop.vue";
 
+const TWO_INGREDIENTS = 2;
+const THREE_INGREDIENTS = 3;
+
+const props = defineProps({
+  dough: {
+    type: String,
+    default: "light",
+  },
+  sauce: {
+    type: String,
+    default: "tomato",
+  },
+  ingredients: {
+    type: Object,
+    default: () => ({}),
+  },
+});
+
+const emits = defineEmits(["drop"]);
+
+const pizzaIngredients = computed(() => {
+  return Object.entries(props.ingredients)
+      .reduce(
+          (result, entry) => {
+            const [key, value] = entry;
+            if (value > 0) {
+              result[key] = value;
+            }
+
+            return result;
+          },
+          {}
+      )
+})
 </script>
 
 <template>
   <div class="content__constructor">
-    <div class="pizza pizza--foundation--big-tomato">
-      <div class="pizza__wrapper">
-        <div class="pizza__filling pizza__filling--ananas"></div>
-        <div class="pizza__filling pizza__filling--bacon"></div>
-        <div class="pizza__filling pizza__filling--cheddar"></div>
+    <app-drop
+        @drop="emits('drop', $event.value)"
+    >
+      <div
+          class="pizza"
+          :class="`pizza--foundation--${dough}-${sauce}`"
+      >
+        <div class="pizza__wrapper">
+          <div
+              v-for="(value, key) in pizzaIngredients"
+              :key="key"
+              class="pizza__filling"
+              :class="[
+                  `pizza__filling--${key}`,
+                  value === TWO_INGREDIENTS && 'pizza__filling--second',
+                  value === THREE_INGREDIENTS && 'pizza__filling--third'
+              ]"
+          />
+        </div>
       </div>
-    </div>
+    </app-drop>
   </div>
 </template>
 
@@ -20,35 +70,6 @@
   margin-top: 25px;
   margin-right: auto;
   margin-left: auto;
-}
-
-.pizza {
-  position: relative;
-
-  display: block;
-
-  box-sizing: border-box;
-  width: 100%;
-
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100%;
-
-  &--foundation--big-creamy {
-    background-image: url("@/assets/img/foundation/big-creamy.svg");
-  }
-
-  &--foundation--big-tomato {
-    background-image: url("@/assets/img/foundation/big-tomato.svg");
-  }
-
-  &--foundation--small-creamy {
-    background-image: url("@/assets/img/foundation/small-creamy.svg");
-  }
-
-  &--foundation--small-tomato {
-    background-image: url("@/assets/img/foundation/small-tomato.svg");
-  }
 }
 
 .pizza__wrapper {
@@ -197,6 +218,35 @@
   &--tomatoes.pizza__filling--second::before,
   &--tomatoes.pizza__filling--third::after {
     background-image: url("@/assets/img/filling-big/tomatoes.svg");
+  }
+}
+
+.pizza {
+  position: relative;
+
+  display: block;
+
+  box-sizing: border-box;
+  width: 100%;
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+
+  &--foundation--big-creamy {
+    background-image: url("@/assets/img/foundation/big-creamy.svg");
+  }
+
+  &--foundation--big-tomato {
+    background-image: url("@/assets/img/foundation/big-tomato.svg");
+  }
+
+  &--foundation--small-creamy {
+    background-image: url("@/assets/img/foundation/small-creamy.svg");
+  }
+
+  &--foundation--small-tomato {
+    background-image: url("@/assets/img/foundation/small-tomato.svg");
   }
 }
 </style>

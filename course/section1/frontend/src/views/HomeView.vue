@@ -30,25 +30,29 @@
           <label class="input">
             <span class="visually-hidden">Название пиццы</span>
             <input
+                v-model="pizza.name"
               type="text"
               name="pizza_name"
               placeholder="Введите название пиццы"
             />
           </label>
 
-          <div class="content__constructor">
-            <div class="pizza pizza--foundation--big-tomato">
-              <div class="pizza__wrapper">
-                <div class="pizza__filling pizza__filling--ananas"></div>
-                <div class="pizza__filling pizza__filling--bacon"></div>
-                <div class="pizza__filling pizza__filling--cheddar"></div>
-              </div>
-            </div>
-          </div>
+          <pizza-constructor
+              :dough="pizza.dough"
+              :sauce="pizza.sauce"
+              :ingredients="pizza.ingredients"
+              @drop="addIngredient"
+          />
 
           <div class="content__result">
-            <p>Итого: 0 ₽</p>
-            <button type="button" class="button" disabled>Готовьте!</button>
+            <p>Итого: {{ price }} ₽</p>
+            <button
+                type="button"
+                class="button"
+                :disabled="disableSubmit"
+            >
+              Готовьте!
+            </button>
           </div>
         </div>
       </div>
@@ -57,7 +61,7 @@
 </template>
 
 <script setup>
-import {reactive} from "vue";
+import {computed, reactive} from "vue";
 import {normalizeDough, normalizeIngredients, normalizeSauces, normalizeSize,} from "@/common/helpers/normalize";
 import doughJSON from "@/mocks/dough.json";
 import ingredientsJSON from "@/mocks/ingredients.json";
@@ -67,6 +71,7 @@ import DiameterSelector from "@/modules/constroctor/DiameterSelector.vue";
 import DoughSelector from "@/modules/constroctor/DoughSelector.vue";
 import SauceSelector from "@/modules/constroctor/SauceSelector.vue";
 import IngredientsSelector from "@/modules/constroctor/IngridientsSelector.vue";
+import PizzaConstructor from "@/modules/constructor/PizzaConstructor.vue";
 
 const doughItems = doughJSON.map(normalizeDough);
 const ingredientItems = ingredientsJSON.map(normalizeIngredients);
@@ -86,6 +91,27 @@ const pizza = reactive({
     {}
   )
 })
+
+const price = computed(() => {
+  const { dough, size, sauce, ingredients } = pizza;
+
+  const sizeMultiplier = sizeItems.find((item) => item.value === size)?.multiplier ?? 1;
+  const doughPrice = doughItems.find((item) => item.value === dough)?.price ?? 0;
+  const saucePrice = sauceItems.find((item) => item.value === sauce)?.price ?? 0;
+  const ingredientsPrice = ingredientItems
+      .map((item) => ingredients[item.value] * item.price)
+      .reduce((acc, item) => acc + item, 0);
+
+  return (doughPrice + saucePrice + ingredientsPrice) * sizeMultiplier;
+});
+
+const disableSubmit = computed(() => {
+  return pizza.name.length === 0 || price.value === 0;
+});
+
+function addIngredient(ingredient) {
+  pizza.ingredients[ingredient]++;
+}
 
 function updateIngredientAmount(ingredient, count) {
   pizza.ingredients[ingredient] = count;
@@ -183,6 +209,68 @@ function updateIngredientAmount(ingredient, count) {
 
   &--small {
     @include b-s18-h21;
+  }
+}
+
+.radio {
+  cursor: pointer;
+
+  span {
+    @include r-s16-h19;
+
+    position: relative;
+
+    padding-left: 28px;
+
+    &:before {
+      @include p_center-v;
+
+      display: block;
+
+      box-sizing: border-box;
+      width: 20px;
+      height: 20px;
+
+      content: "";
+      transition: 0.3s;
+
+      border: 1px solid $purple-400;
+      border-radius: 50%;
+      background-color: $white;
+    }
+  }
+
+  &:hover {
+    input:not(:checked):not(:disabled) + span {
+      &:before {
+        border-color: $purple-800;
+      }
+    }
+  }
+
+  input {
+    display: none;
+
+    &:checked + span {
+      &:before {
+        border: 6px solid $green-500;
+      }
+    }
+
+    &:disabled {
+      & + span {
+        &:before {
+          border-color: $purple-400;
+          background-color: $silver-200;
+        }
+      }
+
+      &:checked + span {
+        &:before {
+          border: 6px solid $purple-400;
+        }
+      }
+    }
   }
 }
 
