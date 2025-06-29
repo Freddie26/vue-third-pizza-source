@@ -1,11 +1,16 @@
 <script setup>
-const model = defineModel();
 defineProps({
+  modelValue: {
+    type: String,
+    default: "",
+  },
   items: {
     type: Array,
     default: () => [],
   }
 });
+
+const emits = defineEmits(["update:modelValue"])
 </script>
 
 <template>
@@ -21,8 +26,8 @@ defineProps({
           type="radio"
           name="sauce"
           :value="sauceType.value"
-          :checked="sauceType.value === model"
-          @input="model = sauceType.value"
+          :checked="sauceType.value === modelValue"
+          @input="emits('update:modelValue', sauceType.value)"
       />
       <span>{{ sauceType.name }}</span>
     </label>

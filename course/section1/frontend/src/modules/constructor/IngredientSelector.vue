@@ -17,7 +17,7 @@ const props = defineProps({
 const emits = defineEmits(['update'])
 
 function getValue(ingredient) {
-  return props.values.value[ingredient] ?? 0;
+  return props.values[ingredient] ?? 0;
 }
 
 function setValue(ingredient, count) {
@@ -48,7 +48,7 @@ function inputValue(ingredient, count) {
           class="ingredients__item"
       >
         <app-drag
-            :data-transfer="ingredientType"
+            :transfer-data="ingredientType"
             :draggable="getValue(ingredientType.value) < MAX_INGREDIENT_COUNT"
         >
           <div class="filling">
@@ -79,7 +79,7 @@ function inputValue(ingredient, count) {
           <button
               type="button"
               class="counter__button counter__button--plus"
-              :disabled="getValue(ingredientType.value) === MAX_INGREDIENT_COUNT"
+              :disabled="getValue(ingredientType.value) >= MAX_INGREDIENT_COUNT"
               @click="increment(ingredientType.value)"
           >
             <span class="visually-hidden">Больше</span>

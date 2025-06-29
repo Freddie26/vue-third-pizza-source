@@ -40,9 +40,7 @@ const pizzaIngredients = computed(() => {
 
 <template>
   <div class="content__constructor">
-    <app-drop
-        @drop="emits('drop', $event.value)"
-    >
+    <app-drop @drop="emits('drop', $event.value)">
       <div
           class="pizza"
           :class="`pizza--foundation--${dough}-${sauce}`"
@@ -82,12 +80,9 @@ const pizzaIngredients = computed(() => {
   position: absolute;
   top: 0;
   left: 0;
-
   display: block;
-
   width: 100%;
   height: 100%;
-
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100%;
@@ -95,23 +90,18 @@ const pizzaIngredients = computed(() => {
   &::before,
   &::after {
     display: none;
-
     position: absolute;
     top: 0;
     left: 0;
-
     width: 100%;
     height: 100%;
-
     content: "";
-
     background-image: inherit;
   }
 
   &--second {
     &::before {
       display: block;
-
       transform: rotate(45deg);
     }
   }
@@ -119,13 +109,10 @@ const pizzaIngredients = computed(() => {
   &--third {
     &::before {
       display: block;
-
       transform: rotate(45deg);
     }
-
     &::after {
       display: block;
-
       transform: rotate(-45deg);
     }
   }
@@ -223,29 +210,26 @@ const pizzaIngredients = computed(() => {
 
 .pizza {
   position: relative;
-
   display: block;
-
   box-sizing: border-box;
   width: 100%;
-
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100%;
 
-  &--foundation--big-creamy {
+  &--foundation--large-creamy {
     background-image: url("@/assets/img/foundation/big-creamy.svg");
   }
 
-  &--foundation--big-tomato {
+  &--foundation--large-tomato {
     background-image: url("@/assets/img/foundation/big-tomato.svg");
   }
 
-  &--foundation--small-creamy {
+  &--foundation--light-creamy {
     background-image: url("@/assets/img/foundation/small-creamy.svg");
   }
 
-  &--foundation--small-tomato {
+  &--foundation--light-tomato {
     background-image: url("@/assets/img/foundation/small-tomato.svg");
   }
 }

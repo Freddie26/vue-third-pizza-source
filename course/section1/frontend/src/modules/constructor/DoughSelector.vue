@@ -1,13 +1,18 @@
 <script setup>
 import {getImage} from "@/common/helpers";
 
-const model = defineModel();
 const props = defineProps({
+  modelValue: {
+    type: String,
+    default: "",
+  },
   items: {
     type: Array,
     default: () => []
   }
 });
+
+const emits = defineEmits(["update:modelValue"])
 </script>
 
 <template>
@@ -26,8 +31,8 @@ const props = defineProps({
               name="dough"
               :value="doughType.value"
               class="visually-hidden"
-              :checked="doughType.value === model"
-              @input="model = doughType.value"
+              :checked="doughType.value === modelValue"
+              @input="emits('update:modelValue', doughType.value)"
           />
           <img :src="getImage(doughType.image)" :alt="doughType.name" />
 

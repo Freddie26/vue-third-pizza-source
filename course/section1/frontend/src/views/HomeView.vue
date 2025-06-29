@@ -67,10 +67,10 @@ import doughJSON from "@/mocks/dough.json";
 import ingredientsJSON from "@/mocks/ingredients.json";
 import saucesJSON from "@/mocks/sauces.json";
 import sizesJSON from "@/mocks/sizes.json";
-import DiameterSelector from "@/modules/constroctor/DiameterSelector.vue";
-import DoughSelector from "@/modules/constroctor/DoughSelector.vue";
-import SauceSelector from "@/modules/constroctor/SauceSelector.vue";
-import IngredientsSelector from "@/modules/constroctor/IngridientsSelector.vue";
+import DiameterSelector from "@/modules/constructor/DiameterSelector.vue";
+import DoughSelector from "@/modules/constructor/DoughSelector.vue";
+import SauceSelector from "@/modules/constructor/SauceSelector.vue";
+import IngredientsSelector from "@/modules/constructor/IngredientSelector.vue";
 import PizzaConstructor from "@/modules/constructor/PizzaConstructor.vue";
 
 const doughItems = doughJSON.map(normalizeDough);
