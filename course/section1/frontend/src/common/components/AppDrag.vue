@@ -13,8 +13,12 @@ const props = defineProps({
 });
 
 function onDrag({ dataTransfer }) {
-  const payload = JSON.stringify(props.transferData)
-  dataTransfer.setData(DATA_TRANSFER_PAYLOAD, payload);
+  dataTransfer.effectAllowed = MOVE;
+  dataTransfer.dropEffect = MOVE;
+  dataTransfer.setData(
+      DATA_TRANSFER_PAYLOAD,
+      JSON.stringify(props.transferData)
+  );
 }
 </script>
 
