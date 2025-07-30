@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { useDataStore } from "@/stores/data";
+import { pizzaPrice } from "@/common/helpers/pizza-price";
 
 export const useCartStore = defineStore(
   "cart",

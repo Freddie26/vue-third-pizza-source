@@ -10,7 +10,7 @@
       >
         <app-drag
           :data-transfer="ingredientType"
-          :draggable="getValue(ingredientType.value) < MAX_INGREDIENT_COUNT"
+          :draggable="values[ingredientType.id] < MAX_INGREDIENT_COUNT"
         >
           <div class="filling">
             <img
@@ -23,11 +23,10 @@
 
         <app-counter
           class="ingredients__counter"
-          :value="getValue(ingredientType.value)"
+          :value="values[ingredientType.id]"
           :min="0"
           :max="MAX_INGREDIENT_COUNT"
-          @input="inputValue(ingredientType.value, $event)"
-          @increment="incrementValue(ingredientType.value)"
+          @input="inputValue(ingredientType.id, $event)"
         />
       </li>
     </ul>
@@ -35,10 +34,10 @@
 </template>
 
 <script setup>
-import { toRef } from "vue";
 import AppDrag from "@/common/components/AppDrag.vue";
 import { MAX_INGREDIENT_COUNT } from "@/common/constants";
 import AppCounter from "@/common/components/AppCounter.vue";
+import { onMounted } from "vue";
 
 const props = defineProps({
   values: {
@@ -51,32 +50,24 @@ const props = defineProps({
   },
 });
 
+onMounted(() => {
+	console.log(props.items);
+});
+
 const emit = defineEmits(["update"]);
-
-const values = toRef(props, "values");
-
-const getValue = (ingredient) => {
-  return values.value[ingredient] ?? 0;
-};
 
 const setValue = (ingredient, count) => {
   emit("update", ingredient, Number(count));
 };
 
-const decrementValue = (ingredient) => {
-  setValue(ingredient, getValue(ingredient) - 1);
-};
-
-const incrementValue = (ingredient) => {
-  setValue(ingredient, getValue(ingredient) + 1);
-};
-
 const inputValue = (ingredient, count) => {
-  return setValue(ingredient, Math.min(MAX_INGREDIENT_COUNT, Number(count)));
+  setValue(ingredient, Math.min(MAX_INGREDIENT_COUNT, Number(count)));
 };
 
 const getImage = (image) => {
-  return new URL(`../../assets/img/${image}`, import.meta.url).href;
+	let path = `../../assets/img/${image}`;
+	console.log(path);
+  return new URL(path, import.meta.url).href;
 };
 </script>
 
