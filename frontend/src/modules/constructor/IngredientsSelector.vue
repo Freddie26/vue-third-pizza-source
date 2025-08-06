@@ -51,7 +51,7 @@ const props = defineProps({
 });
 
 onMounted(() => {
-	console.log(props.items);
+  console.log(props.items);
 });
 
 const emit = defineEmits(["update"]);
@@ -65,8 +65,7 @@ const inputValue = (ingredient, count) => {
 };
 
 const getImage = (image) => {
-	let path = `../../assets/img/${image}`;
-	console.log(path);
+  let path = `../../assets/img/${image}`;
   return new URL(path, import.meta.url).href;
 };
 </script>

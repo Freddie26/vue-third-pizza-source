@@ -1,4 +1,4 @@
-import { ApiService } from "./api-service";
+import { ApiService } from "@/services/api/api-service";
 
 export class CrudService extends ApiService {
   constructor(resource) {

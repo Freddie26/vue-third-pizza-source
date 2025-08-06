@@ -1,6 +1,6 @@
-import { CrudService } from "./api/crud-service";
+import { CrudService } from "@/services/api/crud-service";
 
-export class OrdersService extends CrudService {
+class OrdersService extends CrudService {
   constructor() {
     super("/api/orders");
   }
@@ -17,3 +17,5 @@ export class OrdersService extends CrudService {
     return this.delete(id);
   }
 }
+
+export const ordersService = new OrdersService();
