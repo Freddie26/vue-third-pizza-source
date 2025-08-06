@@ -1,3 +1,5 @@
+import { isAuthenticated } from "@/router/guards/isAuthenticated";
+
 export const routes = [
   {
     path: "",
@@ -27,7 +29,10 @@ export const routes = [
     path: "/user",
     name: "user",
     component: () => import("@/views/UserView.vue"),
-    meta: { layout: "DefaultLayout" },
+    meta: {
+      layout: "DefaultLayout",
+      guards: [isAuthenticated],
+    },
     children: [
       {
         path: "orders",

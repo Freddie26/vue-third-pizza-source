@@ -1,17 +1,8 @@
-import { AddressesService } from "@/services/addresses-service";
-import { DoughsService } from "@/services/doughs-service";
-import { IngredientsService } from "@/services/ingredients-service";
-import { MiscService } from "@/services/misc-service";
-import { OrdersService } from "@/services/orders-service";
-import { SaucesService } from "@/services/sauces-service";
-import { SizesService } from "@/services/sizes-service";
-
-export default {
-  addressesService: new AddressesService(),
-  doughsService: new DoughsService(),
-  ingredientsService: new IngredientsService(),
-  miscService: new MiscService(),
-  ordersService: new OrdersService(),
-  saucesService: new SaucesService(),
-  sizesService: new SizesService(),
-};
+export { addressesService } from "@/services/addresses-service";
+export { authService } from "@/services/auth-service";
+export { doughsService } from "@/services/doughs-service";
+export { ingredientsService } from "@/services/ingredients-service";
+export { miscService } from "@/services/misc-service";
+export { ordersService } from "@/services/orders-service";
+export { saucesService } from "@/services/sauces-service";
+export { sizesService } from "@/services/sizes-service";
