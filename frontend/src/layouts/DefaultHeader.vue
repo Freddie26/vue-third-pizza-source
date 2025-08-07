@@ -3,7 +3,7 @@
     <div class="header__logo">
       <router-link :to="{ name: 'home' }" class="logo">
         <img
-          src="@/assets/img/logo.svg"
+          src="/public/img/logo.svg"
           alt="V!U!E! Pizza logo"
           width="90"
           height="40"
@@ -76,7 +76,7 @@ const logout = async () => {
 
     color: $white;
     background-color: $green-500;
-    background-image: url("@/assets/img/cart.svg");
+    background-image: url("/api/public/img/cart.svg");
     background-repeat: no-repeat;
     background-position: 20px center;
     background-size: 29px 27px;
@@ -155,7 +155,7 @@ const logout = async () => {
     content: "";
     vertical-align: middle;
 
-    background: url("@/assets/img/login.svg") no-repeat center;
+    background: url("/api/public/img/login.svg") no-repeat center;
     background-size: auto 50%;
   }
 }
@@ -171,7 +171,7 @@ const logout = async () => {
     content: "";
     vertical-align: middle;
 
-    background: url("@/assets/img/login.svg") no-repeat center;
+    background: url("/api/public/img/login.svg") no-repeat center;
     background-size: auto 50%;
   }
 }

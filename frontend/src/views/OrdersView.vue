@@ -25,7 +25,7 @@
       <li class="order__item">
         <div class="product">
           <img
-            :src="getImage('product.svg')"
+            :src="getPublicImage('product.svg')"
             class="product__img"
             width="56"
             height="56"
@@ -48,7 +48,7 @@
       <li class="order__item">
         <div class="product">
           <img
-            :src="getImage('product.svg')"
+            :src="getPublicImage('product.svg')"
             class="product__img"
             width="56"
             height="56"
@@ -71,7 +71,7 @@
     <ul class="order__additional">
       <li>
         <img
-          :src="getImage('cola.svg')"
+          :src="getPublicImage('cola.svg')"
           width="20"
           height="30"
           alt="Coca-Cola 0,5 литра"
@@ -83,7 +83,7 @@
       </li>
       <li>
         <img
-          :src="getImage('sauce.svg')"
+          :src="getPublicImage('sauce.svg')"
           width="20"
           height="30"
           alt="Острый соус"
@@ -92,7 +92,7 @@
       </li>
       <li>
         <img
-          :src="getImage('potato.svg')"
+          :src="getPublicImage('potato.svg')"
           width="20"
           height="30"
           alt="Картошка из печи"
@@ -131,7 +131,7 @@
       <li class="order__item">
         <div class="product">
           <img
-            :src="getImage('product.svg')"
+            :src="getPublicImage('product.svg')"
             class="product__img"
             width="56"
             height="56"
@@ -152,7 +152,7 @@
       <li class="order__item">
         <div class="product">
           <img
-            :src="getImage('product.svg')"
+            :src="getPublicImage('product.svg')"
             class="product__img"
             width="56"
             height="56"
@@ -175,7 +175,7 @@
     <ul class="order__additional">
       <li>
         <img
-          :src="getImage('cola.svg')"
+          :src="getPublicImage('cola.svg')"
           width="20"
           height="30"
           alt="Coca-Cola 0,5 литра"
@@ -187,7 +187,7 @@
       </li>
       <li>
         <img
-          :src="getImage('sauce.svg')"
+          :src="getPublicImage('sauce.svg')"
           width="20"
           height="30"
           alt="Острый соус"
@@ -199,7 +199,7 @@
       </li>
       <li>
         <img
-          :src="getImage('potato.svg')"
+          :src="getPublicImage('potato.svg')"
           width="20"
           height="30"
           alt="Картошка из печи"
@@ -218,9 +218,7 @@
 </template>
 
 <script setup>
-const getImage = (image) => {
-  return new URL(`../assets/img/${image}`, import.meta.url).href;
-};
+import { getPublicImage } from "@/common/helpers/public-image";
 </script>
 
 <style lang="scss" scoped>
