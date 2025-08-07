@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import { useDataStore } from "@/stores/data";
 import { pizzaPrice } from "@/common/helpers/pizza-price";
+import { useAuthStore } from "@/stores/auth";
+import { ordersService } from "@/services";
 
 export const useCartStore = defineStore("cart", {
   state: () => ({
@@ -122,6 +124,16 @@ export const useCartStore = defineStore("cart", {
     },
     setComment(comment) {
       this.address.street = comment;
+    },
+    async publishOrder() {
+      const authStore = useAuthStore();
+      return await ordersService.createOrder({
+        userId: authStore.user?.id ?? null,
+        phone: this.phone,
+        address: this.address,
+        pizzas: this.pizzas,
+        misc: this.misc,
+      });
     },
   },
 });
