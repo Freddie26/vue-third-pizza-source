@@ -24,6 +24,6 @@ watch(
       // Если компонент не найдет, добавляем шаблон по-умолчанию
       layout.value = AppLayoutDefault;
     }
-  }
+  },
 );
 </script>

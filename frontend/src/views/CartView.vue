@@ -7,21 +7,21 @@
         </div>
 
         <div
-					class="sheet cart__empty"
-					v-if="cartStore.pizzasExtended.length === 0"
-				>
+          v-if="cartStore.pizzasExtended.length === 0"
+          class="sheet cart__empty"
+        >
           <p>В корзине нет ни одного товара</p>
         </div>
 
         <ul class="cart-list sheet">
           <li
-						class="cart-list__item"
-						v-for="(pizza, index) in cartStore.pizzasExtended"
-						:key="index"
-					>
+            v-for="(pizza, index) in cartStore.pizzasExtended"
+            :key="index"
+            class="cart-list__item"
+          >
             <div class="product cart-list__product">
               <img
-                :src="getImage('product.svg')"
+                :src="getPublicImage('product.svg')"
                 class="product__img"
                 width="56"
                 height="56"
@@ -33,8 +33,9 @@
                   <li>{{ pizza.size.name }}, {{ pizza.dough.name }} тесто</li>
                   <li>Соус: {{ pizza.sauce.name }}</li>
                   <li>
-										Начинка: {{ pizza.ingredients.map((ingr) => ingr.name).join(", ") }}
-									</li>
+                    Начинка:
+                    {{ pizza.ingredients.map((ingr) => ingr.name).join(", ") }}
+                  </li>
                 </ul>
               </div>
             </div>
@@ -51,13 +52,13 @@
             </div>
 
             <div class="cart-list__button">
-							<button
-								type="button"
-								class="cart-list__edit"
-								@click="editPizza(index)"
-							>
-								Изменить
-							</button>
+              <button
+                type="button"
+                class="cart-list__edit"
+                @click="editPizza(index)"
+              >
+                Изменить
+              </button>
             </div>
           </li>
         </ul>
@@ -65,13 +66,13 @@
         <div class="cart__additional">
           <ul class="additional-list">
             <li
-							class="additional-list__item sheet"
-							v-for="misc in cartStore.miscExtended"
-							:key="misc.id"
-						>
+              v-for="misc in cartStore.miscExtended"
+              :key="misc.id"
+              class="additional-list__item sheet"
+            >
               <p class="additional-list__description">
                 <img
-                  :src="getImage(`${misc.image}.svg`)"
+                  :src="getPublicImage(`${misc.image}.svg`)"
                   width="39"
                   height="60"
                   :alt="misc.name"
@@ -100,31 +101,28 @@
             <label class="cart-form__select">
               <span class="cart-form__label">Получение заказа:</span>
 
-							<select
-								name="test"
-								class="select"
-								@input="deliveryOption = $event.target.value"
-							>
-								<option value="self">Заберу сам</option>
-								<option value="new">Новый адрес</option>
-								<option value="home">Дом</option>
-							</select>
+              <select
+                name="test"
+                class="select"
+                @input="deliveryOption = $event.target.value"
+              >
+                <option value="self">Заберу сам</option>
+                <option value="new">Новый адрес</option>
+                <option value="home">Дом</option>
+              </select>
             </label>
 
             <label class="input input--big-label">
               <span>Контактный телефон:</span>
-							<input
-								v-model="phone"
-								type="text"
-								name="tel"
-								placeholder="+7 999-999-99-99"
-							/>
+              <input
+                v-model="phone"
+                type="text"
+                name="tel"
+                placeholder="+7 999-999-99-99"
+              />
             </label>
 
-            <div
-							class="cart-form__address"
-							v-if="deliveryOption === 'new'"
-						>
+            <div v-if="deliveryOption === 'new'" class="cart-form__address">
               <span class="cart-form__label">Новый адрес:</span>
 
               <div class="cart-form__input">
@@ -170,13 +168,9 @@
       </div>
 
       <div class="footer__submit">
-				<button
-					type="submit"
-					class="button"
-					:disabled="cartStore.total === 0"
-				>
-					Оформить заказ
-				</button>
+        <button type="submit" class="button" :disabled="cartStore.total === 0">
+          Оформить заказ
+        </button>
       </div>
     </section>
   </form>
@@ -187,6 +181,7 @@ import AppCounter from "@/common/components/AppCounter.vue";
 import { computed, ref } from "vue";
 import { useCartStore, usePizzaStore, useProfileStore } from "@/stores";
 import { useRouter } from "vue-router";
+import { getPublicImage } from "@/common/helpers/public-image";
 
 const cartStore = useCartStore();
 const pizzaStore = usePizzaStore();
@@ -196,58 +191,54 @@ const router = useRouter();
 const deliveryOption = ref("self");
 
 const phone = computed({
-	get() {
-		return cartStore.phone;
-	},
-	set(value) {
-		cartStore.setPhone(value);
-	},
+  get() {
+    return cartStore.phone;
+  },
+  set(value) {
+    cartStore.setPhone(value);
+  },
 });
 
 const street = computed({
-	get() {
-		return cartStore.address.street;
-	},
-	set(value) {
-		cartStore.setStreet(value);
-	},
+  get() {
+    return cartStore.address.street;
+  },
+  set(value) {
+    cartStore.setStreet(value);
+  },
 });
 
 const building = computed({
-	get() {
-		return cartStore.address.building;
-	},
-	set(value) {
-		cartStore.setBuilding(value);
-	},
+  get() {
+    return cartStore.address.building;
+  },
+  set(value) {
+    cartStore.setBuilding(value);
+  },
 });
 
 const flat = computed({
-	get() {
-		return cartStore.address.flat;
-	},
-	set(value) {
-		cartStore.setFlat(value);
-	},
+  get() {
+    return cartStore.address.flat;
+  },
+  set(value) {
+    cartStore.setFlat(value);
+  },
 });
 
 const editPizza = async (index) => {
-	pizzaStore.loadPizza({
-		index,
-		...cartStore.pizzas[index],
-	});
-	await router.push({ name: "home" });
+  pizzaStore.loadPizza({
+    index,
+    ...cartStore.pizzas[index],
+  });
+  await router.push({ name: "home" });
 };
 
 const submit = async () => {
-	if (deliveryOption.value === "home") {
-		cartStore.setAddress(profileStore.addresses[0]);
-	}
-	await router.push({ name: "success" });
-};
-
-const getImage = (image) => {
-  return new URL(`../assets/img/${image}`, import.meta.url).href;
+  if (deliveryOption.value === "home") {
+    cartStore.setAddress(profileStore.addresses[0]);
+  }
+  await router.push({ name: "success" });
 };
 </script>
 
@@ -529,7 +520,7 @@ const getImage = (image) => {
   border-radius: 8px;
   outline: none;
   background-color: $silver-100;
-  background-image: url("@/assets/img/select.svg");
+  background-image: url("/api/public/img/select.svg");
   background-repeat: no-repeat;
   background-position: right 8px center;
 
